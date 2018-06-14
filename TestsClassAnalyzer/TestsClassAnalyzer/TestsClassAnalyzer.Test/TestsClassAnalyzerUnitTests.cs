@@ -4,7 +4,6 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using TestHelper;
-using TestsClassAnalyzer;
 
 namespace TestsClassAnalyzer.Test
 {
@@ -42,8 +41,8 @@ namespace TestsClassAnalyzer.Test
     }";
             var expected = new DiagnosticResult
             {
-                Id = "TestsClassAnalyzer",
-                Message = String.Format("Tests class '{0}' does not contains the suffix \"Tests\".", "TypeName"),
+                Id = TestsClassAnalyzer.DiagnosticId,
+                Message = String.Format("The class {0} should end with \"Tests\"", "TypeName"),
                 Severity = DiagnosticSeverity.Error,
                 Locations =
                     new[] {
@@ -78,7 +77,7 @@ namespace TestsClassAnalyzer.Test
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
-            return new TestsClassAnalyzerAnalyzer();
+            return new TestsClassAnalyzer();
         }
     }
 }

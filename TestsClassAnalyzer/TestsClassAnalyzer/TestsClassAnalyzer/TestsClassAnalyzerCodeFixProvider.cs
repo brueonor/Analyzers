@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
@@ -11,18 +9,17 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Rename;
-using Microsoft.CodeAnalysis.Text;
 
 namespace TestsClassAnalyzer
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(TestsClassAnalyzerCodeFixProvider)), Shared]
     public class TestsClassAnalyzerCodeFixProvider : CodeFixProvider
     {
-        private const string title = "Add suffix \"Tests\"";
+        private const string title = "Ajouter le suffixe \"Tests\"";
 
         public sealed override ImmutableArray<string> FixableDiagnosticIds
         {
-            get { return ImmutableArray.Create(TestsClassAnalyzerAnalyzer.DiagnosticId); }
+            get { return ImmutableArray.Create(TestsClassAnalyzer.DiagnosticId); }
         }
 
         public sealed override FixAllProvider GetFixAllProvider()
@@ -53,10 +50,7 @@ namespace TestsClassAnalyzer
 
         private async Task<Solution> MakeUppercaseAsync(Document document, TypeDeclarationSyntax typeDecl, CancellationToken cancellationToken)
         {
-            // Compute new uppercase name.
-            var identifierToken = typeDecl.Identifier;
-            var fixedName = $"{identifierToken.Text}Tests";
-            //var newName = identifierToken.Text.ToUpperInvariant();
+            var fixedName = $"{typeDecl.Identifier.Text}Tests";
 
             // Get the symbol representing the type to be renamed.
             var semanticModel = await document.GetSemanticModelAsync(cancellationToken);
@@ -67,7 +61,6 @@ namespace TestsClassAnalyzer
             var optionSet = originalSolution.Workspace.Options;
             var newSolution = await Renamer.RenameSymbolAsync(document.Project.Solution, typeSymbol, fixedName, optionSet, cancellationToken).ConfigureAwait(false);
 
-            // Return the new solution with the now-uppercase type name.
             return newSolution;
         }
     }

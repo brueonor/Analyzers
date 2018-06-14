@@ -87,5 +87,32 @@ namespace TestsClassAnalyzer {
                 return ResourceManager.GetString("AnalyzerTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The name of the tests class should end with&quot;Tests&quot;.
+        /// </summary>
+        internal static string Test0001_Description {
+            get {
+                return ResourceManager.GetString("Test0001_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The class {0} should end with &quot;Tests&quot;.
+        /// </summary>
+        internal static string Test0001_MessageFormat {
+            get {
+                return ResourceManager.GetString("Test0001_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The name of the tests class should end with &quot;Tests&quot;.
+        /// </summary>
+        internal static string Test0001_Title {
+            get {
+                return ResourceManager.GetString("Test0001_Title", resourceCulture);
+            }
+        }
     }
 }

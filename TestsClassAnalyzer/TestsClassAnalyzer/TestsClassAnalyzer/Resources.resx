@@ -129,4 +129,13 @@
     <value>Tests class does not contains the suffix "Tests". </value>
     <comment>The title of the diagnostic.</comment>
   </data>
+  <data name="Test0001_Description" xml:space="preserve">
+    <value>The name of the tests class should end with"Tests"</value>
+  </data>
+  <data name="Test0001_MessageFormat" xml:space="preserve">
+    <value>The class {0} should end with "Tests"</value>
+  </data>
+  <data name="Test0001_Title" xml:space="preserve">
+    <value>The name of the tests class should end with "Tests"</value>
+  </data>
 </root>
