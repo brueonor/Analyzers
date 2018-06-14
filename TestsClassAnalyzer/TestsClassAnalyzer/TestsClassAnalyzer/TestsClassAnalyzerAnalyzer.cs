@@ -23,14 +23,35 @@ namespace TestsClassAnalyzer
         private const string Category = "Naming";
 
         private static DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: Description);
+        private static DiagnosticDescriptor ServiceDataRule = new DiagnosticDescriptor("ServiceDataAnalyzer", "Un ServiceData est injecté dans un ServiceData", "Le ServiceData {0} ne peut pas se faire injecter un autre ServiceData", "InjectionDependance", DiagnosticSeverity.Error, isEnabledByDefault: true, description: "Un ServiceData ne doit pas se faire injecter un autre ServiceData");
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule, ServiceDataRule); } }
 
         public override void Initialize(AnalysisContext context)
         {
             // TODO: Consider registering other actions that act on syntax instead of or in addition to symbols
             // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/Analyzer%20Actions%20Semantics.md for more information
-            context.RegisterSymbolAction(AnalyzeSymbol, SymbolKind.NamedType);
+            //context.RegisterSymbolAction(AnalyzeSymbol, SymbolKind.NamedType);
+
+            context.RegisterSyntaxNodeAction(nodeContext =>
+            {
+                var ctor = (ConstructorDeclarationSyntax)nodeContext.Node;
+                var parameters = ctor.ParameterList
+                                     .ChildNodes()
+                                     .Cast<ParameterSyntax>();
+
+                foreach (var parameter in parameters)
+                {
+                    if (parameter.Type.ToString().ToLower().Contains("ServiceData".ToLower()))
+                    {
+                        var diagnostic = Diagnostic.Create(ServiceDataRule, parameter.GetLocation());
+                        nodeContext.ReportDiagnostic(diagnostic);
+                        return;
+                    }
+                }
+
+
+            }, SyntaxKind.ConstructorDeclaration);
         }
 
         private static void AnalyzeSymbol(SymbolAnalysisContext context)
